@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <title>
+        Diário da Horta
+    </title>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        Diário da Horta
+    </h1>
+
+</header>
+
+
+<hr>
+
+
+<main>
+
+
+<!-- =========================
+     NOVO REGISTRO
+========================= -->
+
+<section id="novo-registro">
+
+    <h2>
+        Registrar atividade
+    </h2>
+
+
+    <form id="form-registro">
+
+
+        <!-- DATA -->
+
+        <p>
+
+            <label for="data">
+                Data:
+            </label>
+
+            <br>
+
+            <input
+                type="date"
+                id="data"
+                required
+            >
+
+        </p>
+
+
+        <!-- PLANTA -->
+
+        <p>
+
+            <label for="planta">
+                Planta:
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="planta"
+                placeholder="Digite o nome da planta"
+                required
+            >
+
+        </p>
+
+
+        <!-- ATIVIDADE -->
+
+        <p>
+
+            <label for="atividade">
+
+                <span
+                    class="ajuda"
+                    title="Informe qual atividade foi realizada na planta, como plantio, rega, adubação, manutenção, colheita ou outro cuidado."
+                    onclick="event.preventDefault(); event.stopPropagation();"
+                >
+                    ?
+                </span>
+
+                Atividade:
+
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="atividade"
+                placeholder="Digite a atividade"
+                required
+            >
+
+        </p>
+
+
+        <!-- OBSERVAÇÃO -->
+
+        <p>
+
+            <label for="observacao">
+                Observação:
+            </label>
+
+            <br>
+
+            <textarea
+                id="observacao"
+                rows="5"
+                cols="50"
+                placeholder="Descreva o que aconteceu..."
+            ></textarea>
+
+        </p>
+
+
+        <button type="submit">
+
+            Salvar registro
+
+        </button>
+
+    </form>
+
+</section>
+
+
+<hr>
+
+
+<!-- =========================
+     FILTROS
+========================= -->
+
+<section>
+
+    <h2>
+        Filtrar histórico
+    </h2>
+
+
+    <form id="form-filtros">
+
+
+        <!-- FILTRO DA PLANTA -->
+
+        <div>
+
+            <label for="filtro-planta">
+                Planta:
+            </label>
+
+            <input
+                type="text"
+                id="filtro-planta"
+                placeholder="Digite o nome da planta"
+            >
+
+        </div>
+
+
+        <!-- FILTRO DA ATIVIDADE -->
+
+        <div>
+
+            <label for="filtro-atividade">
+                Atividade:
+            </label>
+
+            <input
+                type="text"
+                id="filtro-atividade"
+                placeholder="Digite a atividade"
+            >
+
+        </div>
+
+
+        <button type="submit">
+
+            Filtrar
+
+        </button>
+
+
+        <a
+            href="#"
+            id="limpar-filtros"
+        >
+
+            Limpar
+
+        </a>
+
+
+    </form>
+
+</section>
+
+
+<hr>
+
+
+<!-- =========================
+     HISTÓRICO
+========================= -->
+
+<section id="historico">
+
+    <h2>
+        Histórico da horta
+    </h2>
+
+
+    <div id="lista-registros"></div>
+
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+    <hr>
+
+    <p>
+        Diário da Horta
+    </p>
+
+</footer>
+
+
+<script>
+
+
+// =========================
+// INICIALIZAÇÃO
+// =========================
+
+const campoData =
+    document.getElementById("data");
+
+campoData.value =
+    new Date().toISOString().split("T")[0];
+
+
+// =========================
+// PEGAR REGISTROS
+// =========================
+
+function pegarRegistros() {
+
+    const dados =
+        localStorage.getItem("registros");
+
+    if (!dados) {
+
+        return [];
+
+    }
+
+    try {
+
+        return JSON.parse(dados);
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+// =========================
+// SALVAR REGISTROS
+// =========================
+
+function salvarRegistros(registros) {
+
+    localStorage.setItem(
+        "registros",
+        JSON.stringify(registros)
+    );
+
+}
+
+
+// =========================
+// FORMATA DATA
+// =========================
+
+function dataBR(data) {
+
+    if (!data) {
+
+        return "";
+
+    }
+
+    const partes =
+        data.split("-");
+
+    if (partes.length !== 3) {
+
+        return data;
+
+    }
+
+    return (
+        partes[2] +
+        "/" +
+        partes[1] +
+        "/" +
+        partes[0]
+    );
+
+}
+
+
+// =========================
+// MOSTRAR REGISTROS
+// =========================
+
+function mostrarRegistros() {
+
+    const lista =
+        document.getElementById(
+            "lista-registros"
+        );
+
+    const filtroPlanta =
+        document.getElementById(
+            "filtro-planta"
+        ).value.trim().toLowerCase();
+
+
+    const filtroAtividade =
+        document.getElementById(
+            "filtro-atividade"
+        ).value.trim().toLowerCase();
+
+
+    let registros =
+        pegarRegistros();
+
+
+    // =========================
+    // ORDENAR POR DATA
+    // =========================
+
+    registros.sort(
+        function(a, b) {
+
+            return b.data.localeCompare(
+                a.data
+            );
+
+        }
+    );
+
+
+    // =========================
+    // FILTRAR
+    // =========================
+
+    registros =
+        registros.filter(
+            function(registro) {
+
+                const planta =
+                    registro.planta
+                    .toLowerCase();
+
+                const atividade =
+                    registro.atividade
+                    .toLowerCase();
+
+
+                const plantaOk =
+                    filtroPlanta === "" ||
+                    planta.includes(
+                        filtroPlanta
+                    );
+
+
+                const atividadeOk =
+                    filtroAtividade === "" ||
+                    atividade.includes(
+                        filtroAtividade
+                    );
+
+
+                return (
+                    plantaOk &&
+                    atividadeOk
+                );
+
+            }
+        );
+
+
+    lista.innerHTML = "";
+
+
+    // =========================
+    // NENHUM REGISTRO
+    // =========================
+
+    if (registros.length === 0) {
+
+        lista.innerHTML = `
+            <p>
+                Nenhum registro encontrado.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // =========================
+    // CRIAR REGISTROS
+    // =========================
+
+    registros.forEach(
+        function(registro) {
+
+            const article =
+                document.createElement(
+                    "article"
+                );
+
+
+            const titulo =
+                document.createElement(
+                    "h3"
+                );
+
+
+            titulo.textContent =
+                registro.planta +
+                " — " +
+                registro.atividade;
+
+
+            article.appendChild(
+                titulo
+            );
+
+
+            const data =
+                document.createElement(
+                    "p"
+                );
+
+
+            data.innerHTML =
+                "<strong>Data:</strong> " +
+                dataBR(
+                    registro.data
+                );
+
+
+            article.appendChild(
+                data
+            );
+
+
+            // =========================
+            // OBSERVAÇÃO
+            // =========================
+
+            if (
+                registro.observacao &&
+                registro.observacao.trim() !== ""
+            ) {
+
+                const observacao =
+                    document.createElement(
+                        "p"
+                    );
+
+
+                const strong =
+                    document.createElement(
+                        "strong"
+                    );
+
+
+                strong.textContent =
+                    "Observação:";
+
+
+                observacao.appendChild(
+                    strong
+                );
+
+
+                observacao.appendChild(
+                    document.createElement(
+                        "br"
+                    )
+                );
+
+
+                observacao.appendChild(
+                    document.createTextNode(
+                        registro.observacao
+                    )
+                );
+
+
+                article.appendChild(
+                    observacao
+                );
+
+            }
+
+
+            // =========================
+            // BOTÃO EXCLUIR
+            // =========================
+
+            const formExcluir =
+                document.createElement(
+                    "form"
+                );
+
+
+            const botaoExcluir =
+                document.createElement(
+                    "button"
+                );
+
+
+            botaoExcluir.type =
+                "button";
+
+            botaoExcluir.textContent =
+                "Excluir";
+
+
+            botaoExcluir.addEventListener(
+                "click",
+                function() {
+
+                    const confirmar =
+                        confirm(
+                            "Excluir este registro?"
+                        );
+
+
+                    if (!confirmar) {
+
+                        return;
+
+                    }
+
+
+                    let todos =
+                        pegarRegistros();
+
+
+                    todos =
+                        todos.filter(
+                            function(item) {
+
+                                return (
+                                    item.id !==
+                                    registro.id
+                                );
+
+                            }
+                        );
+
+
+                    salvarRegistros(
+                        todos
+                    );
+
+
+                    mostrarRegistros();
+
+                }
+            );
+
+
+            formExcluir.appendChild(
+                botaoExcluir
+            );
+
+
+            article.appendChild(
+                formExcluir
+            );
+
+
+            const hr =
+                document.createElement(
+                    "hr"
+                );
+
+
+            article.appendChild(
+                hr
+            );
+
+
+            lista.appendChild(
+                article
+            );
+
+        }
+    );
+
+}
+
+
+// =========================
+// ADICIONAR REGISTRO
+// =========================
+
+document
+    .getElementById("form-registro")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const data =
+                document.getElementById(
+                    "data"
+                ).value;
+
+
+            const planta =
+                document.getElementById(
+                    "planta"
+                ).value.trim();
+
+
+            const atividade =
+                document.getElementById(
+                    "atividade"
+                ).value.trim();
+
+
+            const observacao =
+                document.getElementById(
+                    "observacao"
+                ).value.trim();
+
+
+            if (
+                planta === "" ||
+                atividade === ""
+            ) {
+
+                return;
+
+            }
+
+
+            const registros =
+                pegarRegistros();
+
+
+            const novoRegistro = {
+
+                id:
+                    Date.now().toString(),
+
+                data:
+                    data,
+
+                planta:
+                    planta,
+
+                atividade:
+                    atividade,
+
+                observacao:
+                    observacao
+
+            };
+
+
+            registros.push(
+                novoRegistro
+            );
+
+
+            salvarRegistros(
+                registros
+            );
+
+
+            // Limpar campos
+
+            document.getElementById(
+                "planta"
+            ).value = "";
+
+
+            document.getElementById(
+                "atividade"
+            ).value = "";
+
+
+            document.getElementById(
+                "observacao"
+            ).value = "";
+
+
+            campoData.value =
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
+
+
+            mostrarRegistros();
+
+        }
+    );
+
+
+// =========================
+// FILTROS
+// =========================
+
+document
+    .getElementById("form-filtros")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+            mostrarRegistros();
+
+        }
+    );
+
+
+// =========================
+// LIMPAR FILTROS
+// =========================
+
+document
+    .getElementById("limpar-filtros")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+
+            document.getElementById(
+                "filtro-planta"
+            ).value = "";
+
+
+            document.getElementById(
+                "filtro-atividade"
+            ).value = "";
+
+
+            mostrarRegistros();
+
+        }
+    );
+
+
+// =========================
+// MOSTRAR AO ABRIR
+// =========================
+
+mostrarRegistros();
+
+
+</script>
+
+
+</body>
+
+</html>

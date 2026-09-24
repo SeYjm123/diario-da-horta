@@ -1,0 +1,314 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f5f1e8;
+    color: #23352f;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    text-align: center;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+header {
+    padding: 55px 20px 60px;
+    background: #f5f1e8;
+    border-bottom: 1px solid #e1e2d9;
+}
+
+header h1 {
+    margin: 20px auto 10px;
+    color: #173d32;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(55px, 8vw, 105px);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+}
+
+header p {
+    margin: 25px auto;
+    max-width: 700px;
+    color: #6d756f;
+    font-size: 17px;
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+main {
+    width: min(900px, 90%);
+    margin: 0 auto;
+    padding: 70px 0 100px;
+}
+
+section {
+    margin-bottom: 60px;
+}
+
+
+/* =========================
+   TÍTULOS
+========================= */
+
+h2 {
+    margin: 0 0 28px;
+    color: #173d32;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(38px, 5vw, 64px);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1;
+}
+
+h2::before {
+    content: "◆";
+    margin-right: 12px;
+    color: #c86d48;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+form {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #dfe3d9;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(23, 61, 50, 0.08);
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+form p {
+    margin: 0 0 22px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 7px;
+    color: #173d32;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+input,
+textarea {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    padding: 13px 15px;
+    border: 1px solid #cfd6cc;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #23352f;
+    font: inherit;
+    outline: none;
+    text-align: center;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #c86d48;
+    box-shadow: 0 0 0 3px rgba(200, 109, 72, 0.12);
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+
+/* =========================
+   BOTÃO
+========================= */
+
+button {
+    display: block;
+    margin: 10px auto 0;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 6px;
+    background: #173d32;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #285748;
+}
+
+
+/* =========================
+   FILTROS
+========================= */
+
+section:nth-of-type(2) form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+section:nth-of-type(2) form div {
+    width: 100%;
+}
+
+section:nth-of-type(2) form input {
+    width: 100%;
+}
+
+section:nth-of-type(2) form button {
+    margin: 0;
+}
+
+section:nth-of-type(2) form a {
+    color: #c86d48;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+section:nth-of-type(2) form a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+#historico article {
+    width: 100%;
+    margin: 0 auto 18px;
+    padding: 25px 28px;
+    background: #ffffff;
+    border: 1px solid #dfe3d9;
+    border-left: 5px solid #c86d48;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(23, 61, 50, 0.08);
+    text-align: center;
+}
+
+#historico article h3 {
+    margin: 0 0 15px;
+    color: #173d32;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+}
+
+#historico article p {
+    margin: 10px 0;
+}
+
+#historico article form {
+    width: auto;
+    margin: 18px auto 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+#historico article form button {
+    margin: 0 auto;
+    background: transparent;
+    color: #c86d48;
+    border: 1px solid rgba(200, 109, 72, 0.45);
+}
+
+#historico article form button:hover {
+    background: #c86d48;
+    color: #ffffff;
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+    padding: 35px 20px;
+    background: #173d32;
+    color: #dfe9e2;
+    text-align: center;
+}
+
+footer hr {
+    display: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 35px 20px 45px;
+    }
+
+    header h1 {
+        font-size: 58px;
+    }
+
+    main {
+        width: 92%;
+        padding-top: 45px;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    #historico article {
+        padding: 20px;
+    }
+
+}
+.ajuda {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    margin-right: 6px;
+
+    border-radius: 50%;
+
+    background: #173d32;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: default;
+    user-select: none;
+}
