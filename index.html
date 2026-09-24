@@ -9,7 +9,9 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
+
     <link rel="icon" type="image/png" href="icone.png">
+
     <link
         rel="stylesheet"
         href="style.css"
@@ -101,8 +103,7 @@
 
                 <span
                     class="ajuda"
-                    title="Informe qual atividade foi realizada na planta, como plantio, rega, adubação, manutenção, colheita ou outro cuidado."
-                    onclick="event.preventDefault(); event.stopPropagation();"
+                    onclick="mostrarAjuda(event)"
                 >
                     ?
                 </span>
@@ -273,6 +274,22 @@ const campoData =
 
 campoData.value =
     new Date().toISOString().split("T")[0];
+
+
+// =========================
+// AJUDA DO BOTÃO ?
+// =========================
+
+function mostrarAjuda(event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    alert(
+        "Informe qual atividade foi realizada na planta, como plantio, rega, adubação, manutenção, colheita ou outro cuidado."
+    );
+
+}
 
 
 // =========================
